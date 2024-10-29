@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "es5", // Set the JavaScript language version for the output files
+    "lib": ["dom", "dom.iterable", "esnext"], // Include libraries for the compilation
+    "allowJs": true, // Allow JavaScript files to be compiled
+    "skipLibCheck": true, // Skip type checking of declaration files
+    "strict": true, // Enable all strict type-checking options
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "forceConsistentCasingInFileNames": true, // Ensure consistent casing in file names
+    "module": "esnext", // Specify the module code generation method
+    "moduleResolution": "node", // Determine how modules get resolved
+    "resolveJsonModule": true, // Allow importing JSON modules
+    "isolatedModules": true, // Treat all files as isolated modules
+    "noEmit": true, // Do not emit output
+    "jsx": "react-jsx", // Specify JSX code generation mode
+    "baseUrl": "./src", // Set the base URL for resolving non-relative module names
+    "paths": {
+      "@components/*": ["components/*"], // Alias for components directory
+      "@utils/*": ["utils/*"], // Alias for utils directory
+      "@hooks/*": ["hooks/*"], // Alias for hooks directory
+      "@assets/*": ["assets/*"]
+    },
+    "esModuleInterop": true, // Enables `import x from 'y'` for CommonJS modules
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "src" // Include all files in the 'src' directory
+  ],
+  "exclude": [
+    "node_modules", // Exclude node_modules folder
+    "build" // Exclude build output folder
+  ]
+}
