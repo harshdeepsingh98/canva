@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import {
   InputContainer,
   LoginContainer,
@@ -7,10 +7,12 @@ import {
   ButtonContainer,
   BottomContainer,
 } from "styles/views/Login";
+import { useNavigate } from "react-router-dom";
 
 const LoginView: React.FC = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     // Clear previous errors
@@ -24,12 +26,13 @@ const LoginView: React.FC = () => {
 
     try {
       // Dummy API call
-      const response = await axios.post("https://dummyapi.io/auth/login", {
-        email,
-      });
+      // const response = await axios.post("https://dummyapi.io/auth/login", {
+      //   email,
+      // });
 
       // Process response
-      console.log("API Response:", response.data);
+      // console.log("API Response:", response.data);
+      navigate("/auth/magic_link_login");
     } catch (error) {
       console.error("API Error:", error);
       setError("An error occurred. Please try again.");
@@ -40,7 +43,15 @@ const LoginView: React.FC = () => {
     <LoginContainer>
       <div>
         <h3>Login</h3>
-        <p>New user? Create an account </p>
+        <p style={{ cursor: "pointer" }}>
+          New user ?{" "}
+          <b
+            style={{ marginLeft: "3px" }}
+            onClick={() => navigate("/auth/register")}
+          >
+            Create an account
+          </b>{" "}
+        </p>
         <InputContainer
           type="email"
           placeholder="Email Address*"
