@@ -4,6 +4,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 const Login = lazy(() => import("../src/pages/login"));
 const MagicLinkLogin = lazy(() => import("../src/pages/magicLinkLogin"));
 const Register = lazy(() => import("../src/pages/Register"));
+const MagicLinkRegister = lazy(() => import("../src/pages/magicLinkRegister"));
+const ChangeEmail = lazy(() => import("../src/pages/changeEmail"));
 
 function App() {
   return (
@@ -13,6 +15,11 @@ function App() {
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/magic_link_login" element={<MagicLinkLogin />} />
         <Route path="/auth/register" element={<Register />} />
+        <Route
+          path="/auth/magic_link_register"
+          element={<MagicLinkRegister />}
+        />
+        <Route path="/auth/change_email" element={<ChangeEmail />} />
       </Routes>
     </Suspense>
   );

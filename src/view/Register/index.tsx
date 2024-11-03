@@ -68,7 +68,7 @@ const RegisterView: React.FC = () => {
 
       // Process response
       // console.log("API Response:", response.data);
-      navigate("/auth/magic_link_login");
+      navigate("/auth/magic_link_register");
     } catch (error) {
       console.error("API Error:", error);
       //   setError("An error occurred. Please try again.");
