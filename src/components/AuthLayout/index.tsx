@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { ReactNode } from "react";
 import type { MenuProps } from "antd";
-import { Layout, Menu, theme } from "antd";
+import { Layout, Menu, theme, Dropdown } from "antd";
 import ProjectLogo from "images/png/Protean X logo.png";
 import Dashboard from "images/png/Dashboard.png";
 import Cred from "images/png/Cred.png";
@@ -11,8 +11,18 @@ import Verification from "images/png/Verification.png";
 import Activity from "images/png/Activity.png";
 import Subscription from "images/png/Subscription.png";
 import Help from "images/png/Help.png";
+import Plus from "images/png/Add.png";
+import AvatarIcon from "images/png/Avatar.png";
+import {
+  TitleContainer,
+  ButtonContainer,
+  ProfileContainer,
+  StyledSpace,
+} from "styles/components/AuthLayout";
+import { Avatar } from "antd";
+import { useNavigate } from "react-router-dom";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 
 interface LayoutProps {
   children: ReactNode;
@@ -52,9 +62,22 @@ const menuItems: MenuProps["items"] = [
 }));
 
 const AuthLayout: React.FC<LayoutProps> = ({ children }) => {
+  const navigate = useNavigate();
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const logoutMenu = (
+    <Menu
+      items={[
+        {
+          key: "logout",
+          label: "Logout",
+          onClick: () => navigate("/"), // Redirect to the homepage
+        },
+      ]}
+    />
+  );
 
   return (
     <Layout hasSider>
@@ -71,13 +94,44 @@ const AuthLayout: React.FC<LayoutProps> = ({ children }) => {
         />
       </Sider>
       <Layout style={{ marginInlineStart: 200 }}>
-        <Header style={{ padding: 0, background: colorBgContainer }} />
-        <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
+        <Header
+          style={{
+            padding: "20px",
+            background: colorBgContainer,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            borderBottom: "1px solid #f1f1f1",
+          }}
+        >
+          <TitleContainer>Dashboard</TitleContainer>
+          <ProfileContainer>
+            <ButtonContainer>
+              <img src={Plus} />
+              New Space
+            </ButtonContainer>
+            <StyledSpace>
+              <Dropdown overlay={logoutMenu} trigger={["click"]}>
+                <Avatar
+                  src={<img src={AvatarIcon} alt="avatar" />}
+                  style={{ cursor: "pointer" }}
+                />
+              </Dropdown>
+            </StyledSpace>
+          </ProfileContainer>
+        </Header>
+        <Content
+          style={{
+            overflow: "initial",
+            background: "#fff",
+            padding: "20px",
+          }}
+        >
           {children}
         </Content>
-        <Footer style={{ textAlign: "center" }}>
+        {/* <Footer style={{ textAlign: "center" }}>
           Ant Design ©{new Date().getFullYear()} Created by Ant UED
-        </Footer>
+        </Footer> */}
       </Layout>
     </Layout>
   );

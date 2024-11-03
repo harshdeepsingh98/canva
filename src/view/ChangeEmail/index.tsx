@@ -55,6 +55,7 @@ const ChangeEmailView: React.FC = () => {
         />
         {error && <ErrorMessageContainer>{error}</ErrorMessageContainer>}
       </div>
+
       <BottomContainer>
         <ButtonContainer onClick={handleSubmit}>
           Send Magic Link

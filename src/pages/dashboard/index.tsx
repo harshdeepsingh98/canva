@@ -1,11 +1,11 @@
 import AuthLayout from "components/AuthLayout";
 import React from "react";
-// import LoginView from "view/Login";
+import DashboardView from "view/Dashboard";
 
 const Dashboard: React.FC = () => {
   return (
     <AuthLayout>
-      <div>hi</div>
+      <DashboardView />
     </AuthLayout>
   );
 };
