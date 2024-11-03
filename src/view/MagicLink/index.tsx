@@ -1,5 +1,3 @@
-// import { useState } from "react";
-// import axios from "axios";
 import {
   LoginContainer,
   //   ErrorMessageContainer,
@@ -12,7 +10,8 @@ import { faRedo, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { Flex, Input, Typography, notification } from "antd";
 import type { GetProps } from "antd";
 import { useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 type OTPProps = GetProps<typeof Input.OTP>;
 
@@ -22,6 +21,7 @@ const MagicLinkView: React.FC = () => {
   const [otp, setOtp] = useState<string>(""); // State for OTP input
   const [error, setError] = useState<string>("");
   const [api, contextHolder] = notification.useNotification();
+  const navigate = useNavigate();
 
   const onChange: OTPProps["onChange"] = (text) => {
     setOtp(text); // Update the OTP state on change
@@ -36,8 +36,9 @@ const MagicLinkView: React.FC = () => {
 
     try {
       // Make API call using Axios
-      const response = await axios.post("/api/your-endpoint", { otp });
-      console.log("API Response:", response.data);
+      // const response = await axios.post("/api/your-endpoint", { otp });
+      // console.log("API Response:", response.data);
+      navigate("/dashboard");
       // Handle successful login here (e.g., redirect user)
     } catch (error) {
       console.error("API Error:", error);

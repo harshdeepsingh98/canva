@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const LeftContainer = styled.div`
   display: flex;
   flex: 1;
-  min-height: 500px;
+  min-height: 530px;
   height: 65vh;
   border: 2px solid #e95d4e;
   align-items: center;
@@ -14,7 +14,7 @@ export const RightContainer = styled.div`
   display: flex;
   background: #e95d4e;
   flex: 1;
-  min-height: 500px;
+  min-height: 530px;
   height: 65vh;
   padding: 50px;
 `;

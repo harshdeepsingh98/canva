@@ -6,6 +6,7 @@ const MagicLinkLogin = lazy(() => import("../src/pages/magicLinkLogin"));
 const Register = lazy(() => import("../src/pages/Register"));
 const MagicLinkRegister = lazy(() => import("../src/pages/magicLinkRegister"));
 const ChangeEmail = lazy(() => import("../src/pages/changeEmail"));
+const Dashboard = lazy(() => import("../src/pages/dashboard"));
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           element={<MagicLinkRegister />}
         />
         <Route path="/auth/change_email" element={<ChangeEmail />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Suspense>
   );
