@@ -44,6 +44,21 @@ export const SearchContainer = styled.div`
   justify-content: space-between;
   width: 100%;
   margin-top: 20px;
+
+  span {
+    flex: 1;
+  }
+
+  button {
+    border: none;
+    background: #fff !important;
+    box-shadow: none;
+    &:focus {
+      outline: none;
+      background: transparent !important;
+      box-shadow: none;
+    }
+  }
 `;
 
 export const TableContainer = styled.div`
@@ -61,10 +76,9 @@ export const ActionContainer = styled.div`
 export const IconContainer = styled.div``;
 export const ButtonContainer = styled.button`
   padding: 10px 20px;
-  background-color: #fff;
+  border: 1px solid #1e3460;
   text-align: center;
-  color: #fff;
-  border: none;
+  color: #1e3460;
   border-radius: 10px;
   cursor: pointer;
   display: flex;
@@ -72,4 +86,5 @@ export const ButtonContainer = styled.button`
   align-items: center;
   justify-content: center;
   height: 20px;
+  background: #fff;
 `;

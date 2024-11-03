@@ -41,3 +41,19 @@ div {
   border-bottom: 2px solid white; /* Maintain the bottom border on focus */
   box-shadow: none; /* Ensure no box shadow appears */
 }
+
+.ant-message-notice-content {
+  padding: 20px;
+
+  .anticon-info-circle {
+    display: none;
+  }
+}
+
+.ant-checkbox-inner:after {
+  background-color: transparent !important;
+}
+
+.ant-menu-root {
+  border-inline-end: none !important;
+}

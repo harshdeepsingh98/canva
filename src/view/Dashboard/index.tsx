@@ -11,10 +11,10 @@ import {
   ActionContainer,
   IconContainer,
 } from "styles/views/Dashboard";
-import { Tabs, Input, Dropdown } from "antd";
+import { Tabs, Input, Dropdown, Button } from "antd";
 import Search from "images/svg/Search";
 import type { TableColumnsType, TableProps } from "antd";
-import Plus from "images/png/Add.png";
+import Plus from "images/png/AddCircle.png";
 import MenuIcon from "images/png/Menu.png";
 import type { MenuProps } from "antd";
 import { useState } from "react";
@@ -55,25 +55,21 @@ const tableMenu: MenuProps["items"] = [
     key: "1",
     label: "Edit Details",
     icon: <Edit />,
-    extra: "⌘S",
   },
   {
     key: "2",
     label: "Delete",
     icon: <Delete />,
-    extra: "⌘S",
   },
   {
     key: "3",
     label: "Archive",
     icon: <Archive />,
-    extra: "⌘S",
   },
   {
     key: "4",
     label: "View",
     icon: <View />,
-    extra: "⌘S",
   },
 ];
 
@@ -111,17 +107,28 @@ const DashboardView: React.FC = () => {
     { number: "09", title: "Schemas" },
   ];
 
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10; // Adjust page size if needed
+  const totalPages = Math.ceil(dataSource.length / pageSize);
 
-  const start = () => {
-    setLoading(true);
-    // ajax request after empty completing
-    setTimeout(() => {
-      setSelectedRowKeys([]);
-      setLoading(false);
-    }, 1000);
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
   };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const paginatedData = dataSource.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize,
+  );
+
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -131,8 +138,6 @@ const DashboardView: React.FC = () => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-
-  const hasSelected = selectedRowKeys.length > 0;
 
   return (
     <>
@@ -166,16 +171,27 @@ const DashboardView: React.FC = () => {
           placeholder="Search for spaces"
           prefix={<Search />}
         />
+        <div style={{ flex: 1, textAlign: "end" }}>
+          <Button onClick={handlePrevPage} disabled={currentPage === 1}>
+            {"<"}
+          </Button>
+          <span>
+            {currentPage} / {totalPages}
+          </span>
+          <Button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+          >
+            {">"}
+          </Button>
+        </div>
       </SearchContainer>
       <TableContainer>
         <Table
-          start={start}
-          hasSelected={hasSelected}
-          loading={loading}
           selectedRowKeys={selectedRowKeys}
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={dataSource}
+          dataSource={paginatedData}
         />
       </TableContainer>
     </>
