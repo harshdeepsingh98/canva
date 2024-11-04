@@ -18,7 +18,7 @@ import { Button, Input, Checkbox, Space } from "antd";
 import type { CheckboxProps } from "antd";
 import { useState } from "react";
 import SearchImg from "images/svg/Search";
-import type { TableColumnsType, TableProps } from "antd";
+import type { TableColumnsType } from "antd";
 import View from "images/png/View.png";
 import Table from "components/Table";
 import Plus from "images/png/Add.png";
@@ -26,42 +26,33 @@ import Duplicate from "images/png/Duplicate.png";
 
 const { TextArea, Search } = Input;
 
-type TableRowSelection<T extends object = object> =
-  TableProps<T>["rowSelection"];
+// type TableRowSelection<T extends object = object> =
+//   TableProps<T>["rowSelection"];
 
 interface DataType {
   key: React.Key;
-  Credential: string;
+  Schema: string;
   Created: string;
   CreatedOn: string;
-  Schema: string;
-  Records: number;
-  Issued: number;
-  Revoked: number;
+  Updated: string;
   Action: React.ReactNode;
 }
 
 const columns: TableColumnsType<DataType> = [
-  { title: "Credential Title", dataIndex: "Credential" },
+  { title: "Schema Name", dataIndex: "Schema" },
   { title: "Created By", dataIndex: "Created" },
   { title: "Created On", dataIndex: "CreatedOn" },
-  { title: "Schema Type", dataIndex: "Schema" },
-  { title: "Records", dataIndex: "Records" },
-  { title: "Issued", dataIndex: "Issued" },
-  { title: "Revoked", dataIndex: "Revoked" },
+  { title: "Last Updated", dataIndex: "Updated" },
   { title: "Action", dataIndex: "Action" },
 ];
 
 const dataSource = Array.from<DataType>({ length: 46 }).map<DataType>(
   (_, i) => ({
     key: i,
-    Credential: `Offer Letter`,
+    Schema: `Offer Letter`,
     Created: "Utkarsh Bafna",
     CreatedOn: `08 May 2024`,
-    Schema: "Offer Letter Sche...",
-    Records: 32,
-    Issued: 32,
-    Revoked: 32,
+    Updated: "15 June 2024",
     Action: (
       <ActionContainer>
         <ButtonContainer>
@@ -85,7 +76,7 @@ const CredentialsView: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10; // Adjust page size if needed
   const totalPages = Math.ceil(dataSource.length / pageSize);
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  //   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
@@ -104,14 +95,14 @@ const CredentialsView: React.FC = () => {
     currentPage * pageSize,
   );
 
-  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
+  //   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+  //     setSelectedRowKeys(newSelectedRowKeys);
+  //   };
 
-  const rowSelection: TableRowSelection<DataType> = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
+  //   const rowSelection: TableRowSelection<DataType> = {
+  //     selectedRowKeys,
+  //     onChange: onSelectChange,
+  //   };
 
   const steps = [
     {
@@ -214,8 +205,8 @@ const CredentialsView: React.FC = () => {
           </SearchContainer>
           <TableContainer>
             <Table
-              selectedRowKeys={selectedRowKeys}
-              rowSelection={rowSelection}
+              selectedRowKeys={[]}
+              rowSelection={null}
               columns={columns}
               dataSource={paginatedData}
             />
