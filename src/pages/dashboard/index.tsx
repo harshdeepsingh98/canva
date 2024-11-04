@@ -4,7 +4,7 @@ import DashboardView from "view/Dashboard";
 
 const Dashboard: React.FC = () => {
   return (
-    <AuthLayout>
+    <AuthLayout title={"Dashboard"}>
       <DashboardView />
     </AuthLayout>
   );

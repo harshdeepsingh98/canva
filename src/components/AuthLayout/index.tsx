@@ -26,6 +26,7 @@ const { Header, Content, Sider } = Layout;
 
 interface LayoutProps {
   children: ReactNode;
+  title: string;
 }
 
 const siderStyle: React.CSSProperties = {
@@ -41,14 +42,14 @@ const siderStyle: React.CSSProperties = {
 };
 
 const menuItems: MenuProps["items"] = [
-  { key: "1", label: "Dashboard", iconSrc: Dashboard },
-  { key: "2", label: "Credentials", iconSrc: Cred },
-  { key: "3", label: "Schemas", iconSrc: Schemas },
-  { key: "4", label: "Designers", iconSrc: Designer },
-  { key: "5", label: "Verification", iconSrc: Verification },
-  { key: "6", label: "Activity", iconSrc: Activity },
-  { key: "7", label: "Your Plan", iconSrc: Subscription },
-  { key: "8", label: "Help", iconSrc: Help },
+  { key: "/dashboard", label: "Dashboard", iconSrc: Dashboard },
+  { key: "/credentials", label: "Credentials", iconSrc: Cred },
+  { key: "/schemas", label: "Schemas", iconSrc: Schemas },
+  { key: "/designers", label: "Designers", iconSrc: Designer },
+  { key: "/verification", label: "Verification", iconSrc: Verification },
+  { key: "/activity", label: "Activity", iconSrc: Activity },
+  { key: "/subscription", label: "Your Plan", iconSrc: Subscription },
+  { key: "/help", label: "Help", iconSrc: Help },
 ].map((item) => ({
   key: item.key,
   label: item.label,
@@ -61,7 +62,7 @@ const menuItems: MenuProps["items"] = [
   ),
 }));
 
-const AuthLayout: React.FC<LayoutProps> = ({ children }) => {
+const AuthLayout: React.FC<LayoutProps> = ({ children, title }) => {
   const navigate = useNavigate();
   const {
     token: { colorBgContainer },
@@ -79,6 +80,10 @@ const AuthLayout: React.FC<LayoutProps> = ({ children }) => {
     />
   );
 
+  const handleMenuClick: MenuProps["onClick"] = (e) => {
+    navigate(e.key); // Navigate to the route based on the clicked item
+  };
+
   return (
     <Layout hasSider>
       <Sider style={siderStyle}>
@@ -89,8 +94,10 @@ const AuthLayout: React.FC<LayoutProps> = ({ children }) => {
           theme="light"
           mode="inline"
           defaultSelectedKeys={["1"]}
+          selectedKeys={[location.pathname]}
           items={menuItems}
           style={{ background: "#f1f1f1" }}
+          onClick={handleMenuClick}
         />
       </Sider>
       <Layout style={{ marginInlineStart: 200 }}>
@@ -104,7 +111,7 @@ const AuthLayout: React.FC<LayoutProps> = ({ children }) => {
             borderBottom: "1px solid #f1f1f1",
           }}
         >
-          <TitleContainer>Dashboard</TitleContainer>
+          <TitleContainer>{title}</TitleContainer>
           <ProfileContainer>
             <ButtonContainer>
               <img src={Plus} />
