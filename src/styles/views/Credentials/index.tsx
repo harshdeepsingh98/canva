@@ -104,3 +104,84 @@ export const CheckboxContainer = styled.div`
     text-align: left;
   }
 `;
+
+export const SelectSchemaContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+export const HeadingContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-family: Metropolis;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 18px;
+  text-align: left;
+  span {
+    font-family: Metropolis;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    text-align: left;
+  }
+`;
+
+export const SearchContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
+
+  span {
+    flex: 1;
+  }
+
+  button {
+    border: none;
+    background: #fff !important;
+    box-shadow: none;
+    &:focus {
+      outline: none;
+      background: transparent !important;
+      box-shadow: none;
+    }
+  }
+`;
+
+export const ActionContainer = styled.div`
+  display: flex;
+  gap: 5px;
+  margin-top: 20px;
+
+  .primary {
+    color: #fff;
+    background: #1e3460;
+  }
+`;
+
+export const IconContainer = styled.div``;
+export const ButtonContainer = styled.button`
+  padding: 10px 20px;
+  border: 1px solid #1e3460;
+  text-align: center;
+  color: #1e3460;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  background: #fff;
+`;
+export const TableContainer = styled.div`
+  display: flex;
+  margin-top: 20px;
+  gap: 20px;
+`;

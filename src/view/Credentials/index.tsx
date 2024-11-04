@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   StepperContainer,
   StyledSteps,
@@ -6,17 +7,112 @@ import {
   DescriptionContainer,
   InputContainer,
   CheckboxContainer,
+  SelectSchemaContainer,
+  HeadingContainer,
+  SearchContainer,
+  ActionContainer,
+  ButtonContainer,
+  TableContainer,
 } from "styles/views/Credentials";
 import { Button, Input, Checkbox, Space } from "antd";
 import type { CheckboxProps } from "antd";
 import { useState } from "react";
+import SearchImg from "images/svg/Search";
+import type { TableColumnsType, TableProps } from "antd";
+import View from "images/png/View.png";
+import Table from "components/Table";
+import Plus from "images/png/Add.png";
+import Duplicate from "images/png/Duplicate.png";
 
 const { TextArea, Search } = Input;
+
+type TableRowSelection<T extends object = object> =
+  TableProps<T>["rowSelection"];
+
+interface DataType {
+  key: React.Key;
+  Credential: string;
+  Created: string;
+  CreatedOn: string;
+  Schema: string;
+  Records: number;
+  Issued: number;
+  Revoked: number;
+  Action: React.ReactNode;
+}
+
+const columns: TableColumnsType<DataType> = [
+  { title: "Credential Title", dataIndex: "Credential" },
+  { title: "Created By", dataIndex: "Created" },
+  { title: "Created On", dataIndex: "CreatedOn" },
+  { title: "Schema Type", dataIndex: "Schema" },
+  { title: "Records", dataIndex: "Records" },
+  { title: "Issued", dataIndex: "Issued" },
+  { title: "Revoked", dataIndex: "Revoked" },
+  { title: "Action", dataIndex: "Action" },
+];
+
+const dataSource = Array.from<DataType>({ length: 46 }).map<DataType>(
+  (_, i) => ({
+    key: i,
+    Credential: `Offer Letter`,
+    Created: "Utkarsh Bafna",
+    CreatedOn: `08 May 2024`,
+    Schema: "Offer Letter Sche...",
+    Records: 32,
+    Issued: 32,
+    Revoked: 32,
+    Action: (
+      <ActionContainer>
+        <ButtonContainer>
+          <img src={View} />
+          View
+        </ButtonContainer>
+        <ButtonContainer className="primary">
+          <img src={Duplicate} />
+          Duplicate
+        </ButtonContainer>
+      </ActionContainer>
+    ),
+  }),
+);
 
 const CredentialsView: React.FC = () => {
   const onChange: CheckboxProps["onChange"] = (e) => {
     console.log(`checked = ${e.target.checked}`);
   };
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10; // Adjust page size if needed
+  const totalPages = Math.ceil(dataSource.length / pageSize);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const paginatedData = dataSource.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize,
+  );
+
+  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+
+  const rowSelection: TableRowSelection<DataType> = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+
   const steps = [
     {
       title: "Space Details",
@@ -85,7 +181,47 @@ const CredentialsView: React.FC = () => {
     },
     {
       title: "Select Schema",
-      content: "Second-content",
+      content: (
+        <SelectSchemaContainer>
+          <HeadingContainer>
+            Select a Credential Schema{" "}
+            <span>
+              A schema serves as a template for credentials used by issuers and
+              verifiers It contains certain credential details like name,
+              license number, date of issue, etc
+            </span>
+          </HeadingContainer>
+          <SearchContainer>
+            <Input
+              size="large"
+              placeholder="Search for spaces"
+              prefix={<SearchImg />}
+            />
+            <div style={{ flex: 1, textAlign: "end" }}>
+              <Button onClick={handlePrevPage} disabled={currentPage === 1}>
+                {"<"}
+              </Button>
+              <span>
+                {currentPage} / {totalPages}
+              </span>
+              <Button
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+              >
+                {">"}
+              </Button>
+            </div>
+          </SearchContainer>
+          <TableContainer>
+            <Table
+              selectedRowKeys={selectedRowKeys}
+              rowSelection={rowSelection}
+              columns={columns}
+              dataSource={paginatedData}
+            />
+          </TableContainer>
+        </SelectSchemaContainer>
+      ),
     },
     {
       title: "Select Design",
@@ -107,9 +243,9 @@ const CredentialsView: React.FC = () => {
     setCurrent(current + 1);
   };
 
-  //   const prev = () => {
-  //     setCurrent(current - 1);
-  //   };
+  const prev = () => {
+    setCurrent(current - 1);
+  };
 
   const handleCancel = () => {
     // Handle cancel logic (e.g., navigate back, reset the form, etc.)
@@ -136,6 +272,19 @@ const CredentialsView: React.FC = () => {
                 style={{ marginLeft: 8, background: "#1e3460" }}
               >
                 Continue
+              </Button>
+            </>
+          )}
+          {current === 1 && (
+            <>
+              <Button onClick={prev}>Back</Button>
+              <Button
+                type="primary"
+                onClick={next}
+                style={{ marginLeft: 8, background: "#1e3460" }}
+              >
+                <img src={Plus} />
+                Create Schema
               </Button>
             </>
           )}
