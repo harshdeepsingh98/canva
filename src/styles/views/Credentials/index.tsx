@@ -247,3 +247,20 @@ export const AddFieldContainer = styled.div`
   justify-content: start;
   padding: 0 20px 20px 20px;
 `;
+
+export const ModalTitle = styled.div`
+  font-family: Metropolis;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 28px;
+  text-align: center;
+  margin-bottom: 10px;
+`;
+
+export const ModalDescription = styled.div`
+  font-family: Metropolis;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 8px;
+  text-align: center;
+`;

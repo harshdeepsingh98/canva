@@ -19,8 +19,10 @@ import {
   CredentialContainerAttribute,
   BorderBottom,
   AddFieldContainer,
+  ModalTitle,
+  ModalDescription,
 } from "styles/views/Credentials";
-import { Button, Input, Checkbox, Space, Select } from "antd";
+import { Button, Input, Checkbox, Space, Select, Modal } from "antd";
 import type { CheckboxProps } from "antd";
 import { useRef, useState } from "react";
 import SearchImg from "images/svg/Search";
@@ -29,6 +31,7 @@ import View from "images/png/View.png";
 import Table from "components/Table";
 import Plus from "images/png/Add.png";
 import Trash from "images/png/Trash.png";
+import FeaturedIcon from "images/png/FeaturedIcon.png";
 import AddField from "images/png/AddField.png";
 import DragandDropAddCircle from "images/png/DragandDropAddCircle.png";
 import Duplicate from "images/png/Duplicate.png";
@@ -117,6 +120,7 @@ const CredentialsView: React.FC = () => {
   const [isCreatingSchema, setIsCreatingSchema] = useState(false);
   const [current, setCurrent] = useState(0);
   const [showManualSchema, setShowManualSchema] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const pageSize = 10; // Adjust page size if needed
   const totalPages = Math.ceil(dataSource.length / pageSize);
@@ -168,6 +172,18 @@ const CredentialsView: React.FC = () => {
     (currentPage - 1) * pageSize,
     currentPage * pageSize,
   );
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancelModal = () => {
+    setIsModalOpen(false);
+  };
 
   const steps = [
     {
@@ -482,13 +498,23 @@ const CredentialsView: React.FC = () => {
             </>
           ) : current === 1 && isCreatingSchema ? (
             <>
-              <Button onClick={() => setIsCreatingSchema(false)}>Cancel</Button>
+              <Button
+                onClick={() => {
+                  setIsCreatingSchema(false);
+                  setShowManualSchema(false);
+                }}
+              >
+                Cancel
+              </Button>
               <Button onClick={prev} style={{ marginLeft: 8 }}>
                 Preview
               </Button>
               <Button
                 type="primary"
-                onClick={next}
+                onClick={() => {
+                  // next();
+                  showModal();
+                }}
                 style={{ marginLeft: 8, background: "#1e3460" }}
               >
                 Publish and Continue
@@ -498,6 +524,60 @@ const CredentialsView: React.FC = () => {
             <></>
           )}
         </div>
+        <Modal
+          title=""
+          open={isModalOpen}
+          onOk={handleOk}
+          onCancel={handleCancelModal}
+          closable={false}
+          bodyStyle={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+          }}
+          style={{
+            top: "50%",
+            transform: "translateY(-50%)",
+          }}
+          footer={null}
+        >
+          <img src={FeaturedIcon} style={{ marginBottom: "20px" }} />
+          <ModalTitle>Schema created successfully</ModalTitle>
+          <ModalDescription>
+            You have successfully created and published <br />
+            <br />
+            Experience Letter Schema
+          </ModalDescription>
+          <div
+            className="custom-modal-footer"
+            style={{
+              marginTop: "20px",
+              textAlign: "center",
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Button style={{ width: "100%" }} onClick={handleCancelModal}>
+              Back
+            </Button>
+            <Button
+              onClick={() => {
+                next();
+                handleCancelModal();
+              }}
+              style={{
+                marginLeft: 8,
+                width: "100%",
+                backgroundColor: "#1E3460",
+                color: "#fff",
+              }}
+            >
+              Continue
+            </Button>
+          </div>
+        </Modal>
       </StepperContainer>
     </>
   );
