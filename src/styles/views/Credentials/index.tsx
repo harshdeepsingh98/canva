@@ -58,7 +58,7 @@ export const ContentContainer = styled.div`
 `;
 
 export const DescriptionContainer = styled.div`
-  width: 100%;
+  // width: 100%;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -184,4 +184,40 @@ export const TableContainer = styled.div`
   display: flex;
   margin-top: 20px;
   gap: 20px;
+`;
+
+export const CreateSchemaContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+`;
+
+export const DragandDropContainer = styled.div`
+  background: #ffffff;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #d9d9d9;
+  border-radius: 6px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .ant-upload-wrapper .ant-upload-drag {
+    background: #fff;
+    border: 1px dashed #bdbdbd;
+  }
+
+  .ant-upload-wrapper {
+    padding: 20px;
+  }
+`;
+
+export const TitleContainer = styled.div`
+  font-family: Metropolis;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  text-align: left;
 `;

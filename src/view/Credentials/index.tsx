@@ -13,6 +13,9 @@ import {
   ActionContainer,
   ButtonContainer,
   TableContainer,
+  CreateSchemaContainer,
+  DragandDropContainer,
+  TitleContainer,
 } from "styles/views/Credentials";
 import { Button, Input, Checkbox, Space } from "antd";
 import type { CheckboxProps } from "antd";
@@ -22,12 +25,12 @@ import type { TableColumnsType } from "antd";
 import View from "images/png/View.png";
 import Table from "components/Table";
 import Plus from "images/png/Add.png";
+import DragandDropAddCircle from "images/png/DragandDropAddCircle.png";
 import Duplicate from "images/png/Duplicate.png";
+import type { UploadProps } from "antd";
+import { message, Upload } from "antd";
 
 const { TextArea, Search } = Input;
-
-// type TableRowSelection<T extends object = object> =
-//   TableProps<T>["rowSelection"];
 
 interface DataType {
   key: React.Key;
@@ -68,12 +71,38 @@ const dataSource = Array.from<DataType>({ length: 46 }).map<DataType>(
   }),
 );
 
+const { Dragger } = Upload;
+
+const props: UploadProps = {
+  name: "file",
+  multiple: true,
+  action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
+  onChange(info) {
+    const { status } = info.file;
+    if (status !== "uploading") {
+      console.log(info.file, info.fileList);
+    }
+
+    if (status === "done") {
+      message.success(`${info.file.name} file uploaded successfully.`);
+    } else if (status === "error") {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  },
+  onDrop(e) {
+    console.log("Dropped files", e.dataTransfer.files);
+  },
+};
+
 const CredentialsView: React.FC = () => {
   const onChange: CheckboxProps["onChange"] = (e) => {
     console.log(`checked = ${e.target.checked}`);
   };
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [isCreatingSchema, setIsCreatingSchema] = useState(false);
+  const [current, setCurrent] = useState(0);
+
   const pageSize = 10; // Adjust page size if needed
   const totalPages = Math.ceil(dataSource.length / pageSize);
   //   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
@@ -90,19 +119,14 @@ const CredentialsView: React.FC = () => {
     }
   };
 
+  const handleCreateSchemaClick = () => {
+    setIsCreatingSchema(true); // Show the create schema view
+  };
+
   const paginatedData = dataSource.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize,
   );
-
-  //   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-  //     setSelectedRowKeys(newSelectedRowKeys);
-  //   };
-
-  //   const rowSelection: TableRowSelection<DataType> = {
-  //     selectedRowKeys,
-  //     onChange: onSelectChange,
-  //   };
 
   const steps = [
     {
@@ -172,7 +196,75 @@ const CredentialsView: React.FC = () => {
     },
     {
       title: "Select Schema",
-      content: (
+      content: isCreatingSchema ? (
+        <CreateSchemaContainer>
+          <HeadingContainer>Create a Credential schema</HeadingContainer>
+          <ContentContainer>
+            <DescriptionContainer>
+              Schema Name
+              <span>
+                Schema name is the name for the template. Everyone who views the
+                credential can see it.
+              </span>
+            </DescriptionContainer>
+            <InputContainer>
+              <Input placeholder="Experience letter" />
+            </InputContainer>
+          </ContentContainer>
+          <ContentContainer>
+            <DescriptionContainer>
+              Schema Description
+              <span>
+                A description of space’s purpose. Although not required, doing
+                this is advised.
+              </span>
+            </DescriptionContainer>
+            <InputContainer>
+              <TextArea
+                placeholder="Schema will be use to create experience letter credential"
+                autoSize={{ minRows: 2, maxRows: 6 }}
+              />
+            </InputContainer>
+          </ContentContainer>
+          <ContentContainer>
+            <DescriptionContainer>
+              Credential Attributes
+              <span>Add attributes that is required in schema.</span>
+            </DescriptionContainer>
+            <DragandDropContainer>
+              <TitleContainer>
+                You can choose to either import an existing JSON schema or
+                create a schema manually
+              </TitleContainer>
+              <Dragger {...props}>
+                <p className="ant-upload-drag-icon">
+                  <img src={DragandDropAddCircle} />
+                </p>
+                <p className="ant-upload-hint">
+                  Drag & Drop files here or <br />
+                  Click on Upload JSON
+                </p>
+              </Dragger>
+              <div
+                style={{
+                  marginTop: 24,
+                  display: "flex",
+                  justifyContent: "end",
+                }}
+              >
+                <Button onClick={}>Upload JSON</Button>
+                <Button
+                  type="primary"
+                  onClick={handleCreateSchemaManuallyClick}
+                  style={{ marginLeft: 8, background: "#1e3460" }}
+                >
+                  Create Mannually
+                </Button>
+              </div>
+            </DragandDropContainer>
+          </ContentContainer>
+        </CreateSchemaContainer>
+      ) : (
         <SelectSchemaContainer>
           <HeadingContainer>
             Select a Credential Schema{" "}
@@ -228,14 +320,13 @@ const CredentialsView: React.FC = () => {
     },
   ];
 
-  const [current, setCurrent] = useState(0);
-
   const next = () => {
     setCurrent(current + 1);
   };
 
   const prev = () => {
     setCurrent(current - 1);
+    setIsCreatingSchema(false);
   };
 
   const handleCancel = () => {
@@ -271,7 +362,7 @@ const CredentialsView: React.FC = () => {
               <Button onClick={prev}>Back</Button>
               <Button
                 type="primary"
-                onClick={next}
+                onClick={handleCreateSchemaClick}
                 style={{ marginLeft: 8, background: "#1e3460" }}
               >
                 <img src={Plus} />
