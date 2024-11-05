@@ -202,7 +202,6 @@ export const DragandDropContainer = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 10px;
 
   .ant-upload-wrapper .ant-upload-drag {
     background: #fff;
@@ -210,7 +209,7 @@ export const DragandDropContainer = styled.div`
   }
 
   .ant-upload-wrapper {
-    padding: 20px;
+    padding: 0 20px;
   }
 `;
 
@@ -220,4 +219,31 @@ export const TitleContainer = styled.div`
   font-weight: 400;
   line-height: 18px;
   text-align: left;
+  padding: 20px;
+`;
+
+export const CredentialContainerAttribute = styled.div`
+  display: flex;
+  width: 100%;
+  gap: 10px;
+  .ant-select {
+    width: 100% !important;
+  }
+  .ant-space {
+    display: contents !important;
+  }
+  position: relative;
+`;
+
+export const BorderBottom = styled.div`
+  border: 1px solid #e9e9e9;
+`;
+
+export const AddFieldContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: start;
+  width: 100%;
+  justify-content: start;
+  padding: 0 20px 20px 20px;
 `;

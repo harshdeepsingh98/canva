@@ -16,15 +16,20 @@ import {
   CreateSchemaContainer,
   DragandDropContainer,
   TitleContainer,
+  CredentialContainerAttribute,
+  BorderBottom,
+  AddFieldContainer,
 } from "styles/views/Credentials";
-import { Button, Input, Checkbox, Space } from "antd";
+import { Button, Input, Checkbox, Space, Select } from "antd";
 import type { CheckboxProps } from "antd";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import SearchImg from "images/svg/Search";
 import type { TableColumnsType } from "antd";
 import View from "images/png/View.png";
 import Table from "components/Table";
 import Plus from "images/png/Add.png";
+import Trash from "images/png/Trash.png";
+import AddField from "images/png/AddField.png";
 import DragandDropAddCircle from "images/png/DragandDropAddCircle.png";
 import Duplicate from "images/png/Duplicate.png";
 import type { UploadProps } from "antd";
@@ -77,6 +82,15 @@ const props: UploadProps = {
   name: "file",
   multiple: true,
   action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
+  beforeUpload: (file) => {
+    const isJson =
+      file.type === "application/json" || file.name.endsWith(".json");
+    if (!isJson) {
+      message.error("You can only upload JSON files!");
+    }
+
+    return isJson || Upload.LIST_IGNORE; // Ignore the file if it's not JSON
+  },
   onChange(info) {
     const { status } = info.file;
     if (status !== "uploading") {
@@ -102,10 +116,33 @@ const CredentialsView: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isCreatingSchema, setIsCreatingSchema] = useState(false);
   const [current, setCurrent] = useState(0);
-
+  const [showManualSchema, setShowManualSchema] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const pageSize = 10; // Adjust page size if needed
   const totalPages = Math.ceil(dataSource.length / pageSize);
-  //   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const handleUploadJsonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click(); // Trigger file input click
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.type !== "application/json") {
+        message.error("You can only upload JSON files.");
+        e.target.value = "";
+        return;
+      }
+
+      // Handle the valid JSON file
+      console.log("File selected:", file);
+    }
+  };
+
+  const handleCreateSchemaManuallyClick = () => {
+    setShowManualSchema(true); // Show manual schema component
+  };
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
@@ -121,6 +158,10 @@ const CredentialsView: React.FC = () => {
 
   const handleCreateSchemaClick = () => {
     setIsCreatingSchema(true); // Show the create schema view
+  };
+
+  const handleSelectChange = (value: string) => {
+    console.log(`selected ${value}`);
   };
 
   const paginatedData = dataSource.slice(
@@ -232,35 +273,102 @@ const CredentialsView: React.FC = () => {
               <span>Add attributes that is required in schema.</span>
             </DescriptionContainer>
             <DragandDropContainer>
-              <TitleContainer>
-                You can choose to either import an existing JSON schema or
-                create a schema manually
-              </TitleContainer>
-              <Dragger {...props}>
-                <p className="ant-upload-drag-icon">
-                  <img src={DragandDropAddCircle} />
-                </p>
-                <p className="ant-upload-hint">
-                  Drag & Drop files here or <br />
-                  Click on Upload JSON
-                </p>
-              </Dragger>
-              <div
-                style={{
-                  marginTop: 24,
-                  display: "flex",
-                  justifyContent: "end",
-                }}
-              >
-                <Button onClick={}>Upload JSON</Button>
-                <Button
-                  type="primary"
-                  onClick={handleCreateSchemaManuallyClick}
-                  style={{ marginLeft: 8, background: "#1e3460" }}
-                >
-                  Create Mannually
-                </Button>
-              </div>
+              {showManualSchema ? (
+                <>
+                  <div
+                    style={{
+                      display: "flex",
+                      padding: "20px",
+                      flexDirection: "column",
+                      gap: "10px",
+                    }}
+                  >
+                    <CredentialContainerAttribute>
+                      <InputContainer>
+                        <Input placeholder="Name" />
+                      </InputContainer>
+                      <InputContainer>
+                        <Space wrap>
+                          <Select
+                            defaultValue="lucy"
+                            style={{ width: 120 }}
+                            onChange={handleSelectChange}
+                            options={[
+                              { value: "jack", label: "Jack" },
+                              { value: "lucy", label: "Lucy" },
+                              { value: "Yiminghe", label: "yiminghe" },
+                              {
+                                value: "disabled",
+                                label: "Disabled",
+                                disabled: true,
+                              },
+                            ]}
+                          />
+                        </Space>
+                      </InputContainer>
+                      <img
+                        src={Trash}
+                        style={{
+                          height: "18px",
+                          width: "18px",
+                          position: "absolute",
+                          right: "-20px",
+                        }}
+                      />
+                    </CredentialContainerAttribute>
+                    <InputContainer>
+                      <TextArea
+                        placeholder="Schema will be use to create experience letter credential"
+                        autoSize={{ minRows: 2, maxRows: 6 }}
+                      />
+                    </InputContainer>
+                    <Checkbox onChange={onChange}>Request Info</Checkbox>
+                    <BorderBottom />
+                  </div>
+                  <AddFieldContainer>
+                    <img src={AddField} />
+                    Add Field
+                  </AddFieldContainer>
+                </>
+              ) : (
+                <>
+                  <TitleContainer>
+                    You can choose to either import an existing JSON schema or
+                    create a schema manually
+                  </TitleContainer>
+                  <Dragger {...props}>
+                    <p className="ant-upload-drag-icon">
+                      <img src={DragandDropAddCircle} />
+                    </p>
+                    <p className="ant-upload-hint">
+                      Drag & Drop files here or <br />
+                      Click on Upload JSON
+                    </p>
+                  </Dragger>
+                  <div
+                    style={{
+                      padding: "20px 20px 20px 0",
+                      display: "flex",
+                      justifyContent: "end",
+                    }}
+                  >
+                    <Button onClick={handleUploadJsonClick}>Upload JSON</Button>
+                    <Button
+                      type="primary"
+                      onClick={handleCreateSchemaManuallyClick}
+                      style={{ marginLeft: 8, background: "#1e3460" }}
+                    >
+                      Create Manually
+                    </Button>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      style={{ display: "none" }}
+                      onChange={handleFileChange}
+                    />
+                  </div>
+                </>
+              )}
             </DragandDropContainer>
           </ContentContainer>
         </CreateSchemaContainer>
@@ -322,11 +430,14 @@ const CredentialsView: React.FC = () => {
 
   const next = () => {
     setCurrent(current + 1);
+    setIsCreatingSchema(false);
+    setShowManualSchema(false);
   };
 
   const prev = () => {
     setCurrent(current - 1);
     setIsCreatingSchema(false);
+    setShowManualSchema(false);
   };
 
   const handleCancel = () => {
@@ -357,7 +468,7 @@ const CredentialsView: React.FC = () => {
               </Button>
             </>
           )}
-          {current === 1 && (
+          {current === 1 && !isCreatingSchema ? (
             <>
               <Button onClick={prev}>Back</Button>
               <Button
@@ -369,6 +480,22 @@ const CredentialsView: React.FC = () => {
                 Create Schema
               </Button>
             </>
+          ) : current === 1 && isCreatingSchema ? (
+            <>
+              <Button onClick={() => setIsCreatingSchema(false)}>Cancel</Button>
+              <Button onClick={prev} style={{ marginLeft: 8 }}>
+                Preview
+              </Button>
+              <Button
+                type="primary"
+                onClick={next}
+                style={{ marginLeft: 8, background: "#1e3460" }}
+              >
+                Publish and Continue
+              </Button>
+            </>
+          ) : (
+            <></>
           )}
         </div>
       </StepperContainer>
